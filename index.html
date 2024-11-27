@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI 计算器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BMI 计算器</h1>
+            <button class="info-button" onclick="toggleInfo()">?</button>
+        </div>
+        <div id="info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="toggleInfo()">&times;</span>
+                <h2>什么是BMI？</h2>
+                <p>BMI（身体质量指数）是一个用于评估人体胖瘦程度的重要指标。它的计算方法是：</p>
+                <p class="formula">BMI = 体重(kg) / (身高(m))²</p>
+                <h3>BMI标准（适用于中国成年人）：</h3>
+                <ul>
+                    <li>偏瘦：BMI < 18.5</li>
+                    <li>正常：18.5 ≤ BMI < 24</li>
+                    <li>超重：24 ≤ BMI < 28</li>
+                    <li>肥胖：BMI ≥ 28</li>
+                </ul>
+                <p class="note">注意：BMI只是一个参考指标，不同年龄、性别和种族可能有所差异。</p>
+            </div>
+        </div>
+        <div class="calculator">
+            <div class="input-group">
+                <label for="height">身高 (cm):</label>
+                <input type="number" id="height" placeholder="请输入身高">
+            </div>
+            <div class="input-group">
+                <label for="weight">体重 (kg):</label>
+                <input type="number" id="weight" placeholder="请输入体重">
+            </div>
+            <button onclick="calculateBMI()">计算 BMI</button>
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            const height = document.getElementById('height').value / 100;
+            const weight = document.getElementById('weight').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!height || !weight) {
+                resultDiv.innerHTML = '请输入有效的身高和体重';
+                return;
+            }
+
+            const bmi = (weight / (height * height)).toFixed(1);
+            let category = '';
+            let advice = '';
+
+            if (bmi < 18.5) {
+                category = '体重过轻';
+                advice = `
+                    <div class="advice">
+                        <p>健康建议：</p>
+                        <ul>
+                            <li>适当增加热量摄入，注意营养均衡</li>
+                            <li>多食用高蛋白食物（如瘦肉、鱼、蛋、豆制品）</li>
+                            <li>进行适度的力量训练，帮助增加肌肉量</li>
+                            <li>建议咨询营养师制定合适的增重计划</li>
+                        </ul>
+                    </div>`;
+            } else if (bmi < 24) {
+                category = '体重正常';
+                advice = `
+                    <div class="advice">
+                        <p>健康建议：</p>
+                        <ul>
+                            <li>继续保持健康的饮食习惯</li>
+                            <li>坚持规律运动，每周至少运动3-5次</li>
+                            <li>保持充足的睡眠和适度的压力管理</li>
+                            <li>定期体检，监测身体健康状况</li>
+                        </ul>
+                    </div>`;
+            } else if (bmi < 28) {
+                category = '超重';
+                advice = `
+                    <div class="advice">
+                        <p>健康建议：</p>
+                        <ul>
+                            <li>控制每日热量摄入，避免高糖高脂食物</li>
+                            <li>增加运动量，建议每天进行30-60分钟有氧运动</li>
+                            <li>注意饮食规律，少食多餐</li>
+                            <li>多摄入膳食纤维，控制精制碳水化合物的摄入</li>
+                        </ul>
+                    </div>`;
+            } else {
+                category = '肥胖';
+                advice = `
+                    <div class="advice">
+                        <p>健康建议：</p>
+                        <ul>
+                            <li>建议在医生指导下制定科学的减重计划</li>
+                            <li>严格控制饮食，记录每日摄入的热量</li>
+                            <li>循序渐进地增加运动量，建议从步行开始</li>
+                            <li>定期监测血压、血糖等身体指标</li>
+                            <li>保持良好的心理状态，可寻求专业营养师帮助</li>
+                        </ul>
+                    </div>`;
+            }
+
+            resultDiv.innerHTML = `
+                <div class="bmi-result">您的 BMI 是: ${bmi}</div>
+                <div class="category">体重状态: ${category}</div>
+                ${advice}
+            `;
+        }
+
+        function toggleInfo() {
+            const modal = document.getElementById('info-modal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('info-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 
